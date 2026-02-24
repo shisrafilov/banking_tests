@@ -6,9 +6,9 @@ Tests covering the login / role-selection flow.
 import pytest
 
 from pages.login_page import LoginPage
+from pages.manager_page import ManagerPage
 from pages.customer_login_page import CustomerLoginPage
 from pages.account_page import AccountPage
-from pages.manager_page import ManagerPage
 
 
 class TestLoginPage:
@@ -22,21 +22,23 @@ class TestLoginPage:
         """
         login_page.should_show_role_selection()
 
-    def test_navigate_to_customer_login(self, customer_login_page: CustomerLoginPage):
+    def test_navigate_to_customer_login(self, login_page: LoginPage):
         """
         GIVEN  the role-selection screen is displayed
         WHEN   the user clicks 'Customer Login'
         THEN   the customer dropdown form is shown
         """
-        customer_login_page.should_show_dropdown()
+        login_page.go_to_customer_login()
+        CustomerLoginPage(login_page.page).should_show_dropdown()
 
-    def test_navigate_to_manager_login(self, manager_page: ManagerPage):
+    def test_navigate_to_manager_login(self, login_page: LoginPage):
         """
         GIVEN  the role-selection screen is displayed
         WHEN   the user clicks 'Bank Manager Login'
-        THEN   the manager panel is displayed (Add Customer tab is visible)
+        THEN   the manager panel is displayed
         """
-        manager_page.should_show_manager_panel()
+        login_page.go_to_manager_login()
+        ManagerPage(login_page.page).should_show_manager_panel()
 
 
 class TestCustomerLogin:
@@ -51,20 +53,18 @@ class TestCustomerLogin:
         """
         GIVEN  the customer login form
         WHEN   a valid customer name is selected and Login is clicked
-        THEN   the account dashboard is shown with the customer's name
+        THEN   the account dashboard is shown with the customer's first name
         """
         customer_login_page.login_as(customer_name)
         ap = AccountPage(customer_login_page.page)
         ap.should_be_logged_in()
-        # Verify the welcome banner contains the first name
-        first_name = customer_name.split()[0]
-        ap.should_show_welcome(first_name)
+        ap.should_show_welcome_for(customer_name)
 
-    def test_customer_can_logout(self, account_page_harry: AccountPage, customer_login_page: CustomerLoginPage):
+    def test_customer_can_logout(self, account_page_harry: AccountPage):
         """
         GIVEN  Harry Potter is logged in
         WHEN   he clicks the logout button
         THEN   the app returns to the Customer Login screen
         """
         account_page_harry.logout()
-        customer_login_page.should_show_dropdown()
+        CustomerLoginPage(account_page_harry.page).should_show_dropdown()

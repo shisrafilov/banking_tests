@@ -42,14 +42,14 @@ class TestWithdrawal:
         GIVEN  Harry Potter has sufficient funds (seeded via deposit)
         WHEN   he withdraws 200
         THEN   balance decreases by 200
-               AND a success message is displayed
         """
+        initial_balance = account_page_harry.balance()
+
         account_page_harry.deposit(1000)
-        balance_after_deposit = account_page_harry.balance()
+        account_page_harry.should_have_balance(initial_balance + 1000)  # ждём обновления баланса
 
         account_page_harry.withdraw(200)
-
-        account_page_harry.should_have_balance(balance_after_deposit - 200)
+        account_page_harry.should_have_balance(initial_balance + 800)
 
     def test_overdraft_does_not_change_balance(self, account_page_harry: AccountPage):
         """

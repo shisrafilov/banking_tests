@@ -45,9 +45,7 @@ class TestManagerPanel:
         WHEN   the table renders
         THEN   at least one customer row is present (pre-seeded data)
         """
-        manager_page.should_show_customer_table()
-        rows = manager_page.page.locator(manager_page.CUSTOMER_ROWS)
-        assert rows.count() > 0, "Expected at least one pre-seeded customer row"
+        manager_page.should_have_customers()
 
     def test_search_filters_customer_list(self, manager_page: ManagerPage):
         """
@@ -56,10 +54,4 @@ class TestManagerPanel:
         THEN   only rows containing 'Harry' are displayed
         """
         manager_page.search_customer("Harry")
-        rows = manager_page.page.locator(manager_page.CUSTOMER_ROWS)
-        count = rows.count()
-        assert count >= 1, "Search should return at least one result for 'Harry'"
-        for i in range(count):
-            assert "Harry" in rows.nth(i).inner_text(), (
-                f"Row {i} does not contain 'Harry': {rows.nth(i).inner_text()}"
-            )
+        manager_page.should_all_rows_contain("Harry")

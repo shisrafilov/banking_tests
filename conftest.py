@@ -5,7 +5,7 @@ Fixtures follow the Page Object Model: each fixture provides a ready-to-use
 page object, navigated to the correct URL, so individual tests stay concise.
 """
 import pytest
-from playwright.sync_api import Page, Browser
+from playwright.sync_api import Page, Browser, expect
 
 from pages.login_page import LoginPage
 from pages.customer_login_page import CustomerLoginPage
@@ -27,7 +27,8 @@ def page(browser: Browser) -> Page:
     """
     context = browser.new_context(viewport={"width": 1280, "height": 1024})
     pg = context.new_page()
-    pg.set_default_timeout(30_000)
+    pg.set_default_timeout(10_000)
+    expect.set_options(timeout=10_000)
     yield pg
     context.close()
 
