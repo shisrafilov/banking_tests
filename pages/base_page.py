@@ -1,5 +1,5 @@
 """Base page class providing shared browser interactions."""
-from playwright.sync_api import Page, expect
+from playwright.sync_api import Page
 
 
 class BasePage:
@@ -12,9 +12,3 @@ class BasePage:
 
     def navigate_to(self, path: str = "/login") -> None:
         self.page.goto(f"{self.BASE_URL}{path}")
-
-    def get_alert_text(self) -> str:
-        """Capture and dismiss browser dialog, returning its message."""
-        with self.page.expect_event("dialog") as dialog_info:
-            yield
-        return dialog_info.value.message

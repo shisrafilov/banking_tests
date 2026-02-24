@@ -8,9 +8,7 @@ class AccountPage(BasePage):
     """Models the customer account dashboard (transactions, deposit, withdraw)."""
 
     # -- Locators ----------------------------------------------------------
-    ACCOUNT_NO        = "div.center > strong:nth-of-type(1)"
     BALANCE           = "div.center > strong:nth-of-type(2)"
-    CURRENCY          = "div.center > strong:nth-of-type(3)"
     DEPOSIT_TAB       = "button[ng-click='deposit()']"
     WITHDRAW_TAB      = "button[ng-click='withdrawl()']"
     TRANSACTIONS_TAB  = "button[ng-click='transactions()']"
@@ -55,7 +53,6 @@ class AccountPage(BasePage):
 
     def should_show_success_message(self, text: str) -> None:
         expect(self.page.locator(self.SUCCESS_MSG)).to_contain_text(text)
-
 
     def should_have_balance(self, expected: int) -> None:
         expect(self.page.locator(self.BALANCE)).to_have_text(str(expected))

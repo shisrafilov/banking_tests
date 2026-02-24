@@ -4,11 +4,11 @@ tests/test_login.py
 Tests covering the login / role-selection flow.
 """
 import pytest
-from playwright.sync_api import expect
 
 from pages.login_page import LoginPage
 from pages.customer_login_page import CustomerLoginPage
 from pages.account_page import AccountPage
+from pages.manager_page import ManagerPage
 
 
 class TestLoginPage:
@@ -22,26 +22,21 @@ class TestLoginPage:
         """
         login_page.should_show_role_selection()
 
-    def test_navigate_to_customer_login(self, login_page: LoginPage):
+    def test_navigate_to_customer_login(self, customer_login_page: CustomerLoginPage):
         """
         GIVEN  the role-selection screen is displayed
         WHEN   the user clicks 'Customer Login'
         THEN   the customer dropdown form is shown
         """
-        login_page.go_to_customer_login()
-        clp = CustomerLoginPage(login_page.page)
-        clp.should_show_dropdown()
+        customer_login_page.should_show_dropdown()
 
-    def test_navigate_to_manager_login(self, login_page: LoginPage):
+    def test_navigate_to_manager_login(self, manager_page: ManagerPage):
         """
         GIVEN  the role-selection screen is displayed
         WHEN   the user clicks 'Bank Manager Login'
         THEN   the manager panel is displayed (Add Customer tab is visible)
         """
-        from pages.manager_page import ManagerPage
-        login_page.go_to_manager_login()
-        mp = ManagerPage(login_page.page)
-        mp.should_show_manager_panel()
+        manager_page.should_show_manager_panel()
 
 
 class TestCustomerLogin:
@@ -65,13 +60,11 @@ class TestCustomerLogin:
         first_name = customer_name.split()[0]
         ap.should_show_welcome(first_name)
 
-    def test_customer_can_logout(self, account_page_harry: AccountPage):
+    def test_customer_can_logout(self, account_page_harry: AccountPage, customer_login_page: CustomerLoginPage):
         """
         GIVEN  Harry Potter is logged in
         WHEN   he clicks the logout button
         THEN   the app returns to the Customer Login screen
         """
         account_page_harry.logout()
-        # After logout the customer dropdown should reappear
-        clp = CustomerLoginPage(account_page_harry.page)
-        clp.should_show_dropdown()
+        customer_login_page.should_show_dropdown()

@@ -10,7 +10,6 @@ class LoginPage(BasePage):
     # -- Locators ----------------------------------------------------------
     CUSTOMER_LOGIN_BTN = "button[ng-click='customer()']"
     MANAGER_LOGIN_BTN  = "button[ng-click='manager()']"
-    PAGE_HEADER        = "div.home > div"
 
     def __init__(self, page: Page) -> None:
         super().__init__(page)
