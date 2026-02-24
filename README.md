@@ -1,4 +1,4 @@
-# Banking Project – Automated Test Suite
+# Banking Project
 
 Automated tests for the [GlobalSQA Banking Project](https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login) using **Python + Playwright**.
 
